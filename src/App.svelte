@@ -100,7 +100,4 @@
 
 </div>
 
-<div class="text-center p-4 text-gray-400">
-	Made by Teerapat Anantarattanachai<br />
-	Something breaks, needs upgrade. Let me know
-</div>
+
