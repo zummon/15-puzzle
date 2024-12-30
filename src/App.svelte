@@ -23,7 +23,6 @@
 
 	// gemini.google
 	function movin (rowidx, colidx) {
-		countMove += 1;
 		const emptyRow = tiles.findIndex((r) => r.includes(null));
 		const emptyCol = tiles[emptyRow].indexOf(null);
 
@@ -45,10 +44,8 @@
 				newCol < 4 &&
 				tiles[newRow][newCol] === null
 			) {
-				[tiles[rowidx][colidx], tiles[newRow][newCol]] = [
-					tiles[newRow][newCol],
-					tiles[rowidx][colidx]
-				];
+				[tiles[rowidx][colidx], tiles[newRow][newCol]] = [tiles[newRow][newCol],tiles[rowidx][colidx]];
+				countMove += 1;
 				return;
 			}
 		}
@@ -79,7 +76,7 @@
 
 
 <div class="text-center p-4">
-	<button class="font-semibold text-lg border-b-2 border-violet-600 hover:border-transparent text-violet-300" onclick={()=> { shuffle(); }}>
+	<button class="cursor-pointer font-semibold text-lg border-b-2 border-violet-600 hover:border-transparent hover:text-violet-300" onclick={()=> { shuffle(); }}>
 		Restart
 	</button>
 	<span class="ml-6 {countMove > 0 ? '' : 'hidden'}">Moves: {countMove}</span>
@@ -89,7 +86,7 @@
 	{#each tiles as row, rowidx}
 		{#each row as tile, colidx}
 			<button
-				class="block border p-6 border-violet-600 bg-gray-100 {tile == null ? 'bg-violet-600' : (success[rowidx][colidx] ? 'bg-yellow-300' : '')}"
+				class="cursor-pointer block border p-6 border-violet-600 bg-gray-100 {tile == null ? 'bg-violet-600' : (success[rowidx][colidx] ? 'bg-yellow-300' : '')}"
 				onclick={()=> { movin(rowidx, colidx); }} >{tile}
 			</button>
 		{/each}
