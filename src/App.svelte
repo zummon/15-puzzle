@@ -79,25 +79,21 @@
 
 
 <div class="text-center p-4">
-	<button class="font-semibold text-lg" onclick={()=> { shuffle(); }}>
+	<button class="font-semibold text-lg border-b-2 border-violet-600 hover:border-transparent text-violet-300" onclick={()=> { shuffle(); }}>
 		Restart
 	</button>
-	<span class="ml-6 {countMove > 0 ? '' : 'hidden'}">Move: {countMove}</span>
+	<span class="ml-6 {countMove > 0 ? '' : 'hidden'}">Moves: {countMove}</span>
 </div>
 
-<div
-	class="grid grid-cols-4 p-4 text-center font-semibold text-4xl font-mono border border-gray-900 w-fit mx-auto text-gray-900">
+<div class="grid grid-cols-4 p-4 text-center font-semibold text-4xl font-mono border border-gray-900 w-fit mx-auto text-gray-900">
 	{#each tiles as row, rowidx}
-
-	{#each row as tile, colidx}
-	<button
-		class="block border p-6 border-violet-600 bg-gray-100 {tile == null ? 'bg-violet-600' : (success[rowidx][colidx] ? 'bg-yellow-300' : '')}"
-		onclick={()=> { movin(rowidx, colidx); }} >{tile}
-	</button>
+		{#each row as tile, colidx}
+			<button
+				class="block border p-6 border-violet-600 bg-gray-100 {tile == null ? 'bg-violet-600' : (success[rowidx][colidx] ? 'bg-yellow-300' : '')}"
+				onclick={()=> { movin(rowidx, colidx); }} >{tile}
+			</button>
+		{/each}
 	{/each}
-
-	{/each}
-
 </div>
 
 
