@@ -69,11 +69,53 @@
 		countMove = 0;
 	}
 
+	function handleKeydown(e) {
+		if (e.key == "ArrowLeft") {
+
+		} else if (e.key == "ArrowRight") {
+
+		} else if (e.key == "ArrowUp") {
+		} else if (e.key == "ArrowDown") {
+			let begin = [
+				[1, 2, 3, 4],
+				[5, 6, 7, 8],
+				[9, 10, 11, 12],
+				[13, 14, 15, null]
+			]
+			let test = [
+				[1, 2, 3, 4],
+				[5, 6, 7, 8],
+				[9, 10, 11, 12],
+				[13, 14, 15, null]
+			]
+			let direct 
+			begin.forEach((tale, index) => {
+				if (tale.includes(null)) {
+					direct = index
+				}
+			})
+			begin.forEach((tale, index) => {
+				if (begin[index + 1]) {
+					test[index + 1][direct] = tale[direct]
+				}
+			})
+			begin[0][direct] = null
+			let want = [
+				[1, 2, 3, null],
+				[5, 6, 7, 4],
+				[9, 10, 11, 8],
+				[13, 14, 15, 12]
+			]
+			alert(JSON.stringify(begin))
+		}
+	}
+
 	onMount(() => {
 		shuffle();
 	})
 </script>
 
+<svelte:document onkeydown={(e) => {handleKeydown(e)}}></svelte:document>
 
 <div class="text-center p-4">
 	<button class="cursor-pointer font-semibold text-lg border-b-2 border-violet-600 hover:border-transparent hover:text-violet-300" onclick={()=> { shuffle(); }}>
