@@ -1,28 +1,29 @@
 <script>
 	import { onMount } from "svelte";
 
+	function indicate(array) {
+		let indicate = [];
+		for (let rowindex = 0; rowindex < array.length; rowindex++) {
+			for (let colindex = 0; colindex < array[rowindex].length; colindex++) {
+				if (array[rowindex][colindex] === null) {
+					indicate = [rowindex, colindex];
+				}
+			}
+		}
+		return indicate;
+	}
+
 	const cubes = [
 		[1, 2, 3, 4],
 		[5, 6, 7, 8],
 		[9, 10, 11, 12],
-		[13, 14, 15, null]
+		[13, 14, 15, null],
 	];
-	let tiles = $state(cubes)
-	let countMove = $state(0)
-	let success = $derived.by(() => {
-		return cubes.reduce(
-			(arr, row, rowidx) => {
-				row.forEach((tile, colidx) => {
-					arr[rowidx][colidx] = tile == tiles[rowidx][colidx];
-				});
-				return arr;
-			},
-			[[], [], [], []]
-		);
-	})
+	let tiles = $state(cubes);
+	let countMove = $state(0);
 
 	// gemini.google
-	function movin (rowidx, colidx) {
+	function movin(rowidx, colidx) {
 		const emptyRow = tiles.findIndex((r) => r.includes(null));
 		const emptyCol = tiles[emptyRow].indexOf(null);
 
@@ -30,7 +31,7 @@
 			[0, 1], // Right
 			[0, -1], // Left
 			[1, 0], // Down
-			[-1, 0] // Up
+			[-1, 0], // Up
 		];
 
 		for (const [dr, dc] of directions) {
@@ -44,15 +45,17 @@
 				newCol < 4 &&
 				tiles[newRow][newCol] === null
 			) {
-				[tiles[rowidx][colidx], tiles[newRow][newCol]] = [tiles[newRow][newCol],tiles[rowidx][colidx]];
+				[tiles[rowidx][colidx], tiles[newRow][newCol]] = [
+					tiles[newRow][newCol],
+					tiles[rowidx][colidx],
+				];
 				countMove += 1;
 				return;
 			}
 		}
 	}
 
-
-	function shuffle () {
+	function shuffle() {
 		const flatGrid = tiles.flat();
 
 		for (let i = flatGrid.length - 1; i > 0; i--) {
@@ -70,69 +73,91 @@
 	}
 
 	function handleKeydown(e) {
+		let [rowindex, colindex] = indicate(tiles);
 		if (e.key == "ArrowLeft") {
-
+			let applies = [];
+			tiles[rowindex].forEach((pile) => {
+				if (pile) {
+					applies.push(pile);
+				}
+			});
+			applies.push(null);
+			applies.forEach((apply, colindex) => {
+				tiles[rowindex][colindex] = apply;
+			});
 		} else if (e.key == "ArrowRight") {
-
+			let applies = [null];
+			tiles[rowindex].forEach((pile) => {
+				if (pile) {
+					applies.push(pile);
+				}
+			});
+			applies.forEach((apply, colindex) => {
+				tiles[rowindex][colindex] = apply;
+			});
 		} else if (e.key == "ArrowUp") {
+			let applies = [];
+			tiles.forEach((piles) => {
+				if (piles[colindex]) {
+					applies.push(piles[colindex]);
+				}
+			});
+			applies.push(null);
+			applies.forEach((apply, rowindex) => {
+				tiles[rowindex][colindex] = apply;
+			});
 		} else if (e.key == "ArrowDown") {
-			let begin = [
-				[1, 2, 3, 4],
-				[5, 6, 7, 8],
-				[9, 10, 11, 12],
-				[13, 14, 15, null]
-			]
-			let test = [
-				[1, 2, 3, 4],
-				[5, 6, 7, 8],
-				[9, 10, 11, 12],
-				[13, 14, 15, null]
-			]
-			let direct 
-			begin.forEach((tale, index) => {
-				if (tale.includes(null)) {
-					direct = index
+			let applies = [null];
+			tiles.forEach((piles) => {
+				if (piles[colindex]) {
+					applies.push(piles[colindex]);
 				}
-			})
-			begin.forEach((tale, index) => {
-				if (begin[index + 1]) {
-					test[index + 1][direct] = tale[direct]
-				}
-			})
-			begin[0][direct] = null
-			let want = [
-				[1, 2, 3, null],
-				[5, 6, 7, 4],
-				[9, 10, 11, 8],
-				[13, 14, 15, 12]
-			]
-			alert(JSON.stringify(begin))
+			});
+			applies.forEach((apply, rowindex) => {
+				tiles[rowindex][colindex] = apply;
+			});
 		}
 	}
 
 	onMount(() => {
 		shuffle();
-	})
+	});
 </script>
 
-<svelte:document onkeydown={(e) => {handleKeydown(e)}}></svelte:document>
+<svelte:document
+	onkeydown={(e) => {
+		handleKeydown(e);
+	}}
+/>
 
 <div class="text-center p-4">
-	<button class="cursor-pointer font-semibold text-lg border-b-2 border-violet-600 hover:border-transparent hover:text-violet-300" onclick={()=> { shuffle(); }}>
+	<button
+		class="cursor-pointer font-semibold text-lg border-b-2 border-violet-600 hover:border-transparent hover:text-violet-300"
+		onclick={() => {
+			shuffle();
+		}}
+	>
 		Restart
 	</button>
 	<span class="ml-6 {countMove > 0 ? '' : 'hidden'}">Moves: {countMove}</span>
 </div>
 
-<div class="grid grid-cols-4 p-4 text-center font-semibold text-4xl font-mono border border-gray-900 w-fit mx-auto text-gray-900">
-	{#each tiles as row, rowidx}
-		{#each row as tile, colidx}
+<div
+	class="grid grid-cols-4 p-4 text-center font-semibold text-4xl font-mono border border-gray-900 w-fit mx-auto text-gray-900"
+>
+	{#each tiles as piles, rowindex}
+		{#each piles as pile, colindex}
 			<button
-				class="cursor-pointer block border p-6 border-violet-600 bg-gray-100 {tile == null ? 'bg-violet-600' : (success[rowidx][colidx] ? 'bg-yellow-300' : '')}"
-				onclick={()=> { movin(rowidx, colidx); }} >{tile}
+				class="cursor-pointer block border p-6 border-violet-600 {pile == null
+					? 'bg-violet-600'
+					: cubes[rowindex][colindex] == pile
+						? 'bg-yellow-300'
+						: 'bg-gray-100'}"
+				onclick={() => {
+					movin(rowindex, colindex);
+				}}
+				>{pile}
 			</button>
 		{/each}
 	{/each}
 </div>
-
-
