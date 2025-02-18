@@ -38,18 +38,26 @@
 			[9, 10, 11, 12],
 			[13, 14, 15, null],
 		],
-		'3x3': [
-			[1, 2, 3],
-			[4, 5, 6],
-			[7, 8, null],
+		'๔x๓': [
+			['๑', '๒', '๓'],
+			['๔', '๕', '๖'],
+			['๗', '๘', '๙'],
+			['๑๐', '๑๑', null],
+		],
+		'三乘三': [
+			['一', '二', '三'],
+			['四', '五', '六'],
+			['七', '八', null],
 		]
 	}
+	const keys = Object.keys(pattern)
 
-	let cubes = $state(pattern['4x4']);
+	let board = $state(keys[0])
+	let cubes = $state(pattern[keys[0]]);
 	let tiles = $state([]);
 	let countMove = $state(0);
 
-	function restart(pat = pattern['4x4']) {
+	function restart(pat = pattern[board]) {
 		let flatGrid = pat.flat();
 		
 		flatGrid = shuffle(flatGrid);
@@ -134,11 +142,12 @@
 </script>
 
 <div class="flex flex-wrap justify-center items-center gap-6 p-4">
-	<label>
-		<select class="cursor-pointer bg-neutral-900 text-neutral-50" oninput={(e) => {
-			restart(pattern[e.target.value])
+	<label class="">
+		<select class="cursor-pointer bg-neutral-900 text-neutral-50 text-center" oninput={(e) => {
+			board = e.target.value
+			restart(pattern[board])
 		}}>
-		{#each Object.keys(pattern) as key}
+		{#each keys as key}
 			<option value={key}>{key}</option>
 		{/each}
 		</select>
