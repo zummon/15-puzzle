@@ -31,22 +31,31 @@
 
 		return array;
 	}
+	const pattern = {
+		'4x4': [
+			[1, 2, 3, 4],
+			[5, 6, 7, 8],
+			[9, 10, 11, 12],
+			[13, 14, 15, null],
+		],
+		'3x3': [
+			[1, 2, 3],
+			[4, 5, 6],
+			[7, 8, null],
+		]
+	}
 
-	const cubes = [
-		[1, 2, 3, 4],
-		[5, 6, 7, 8],
-		[9, 10, 11, 12],
-		[13, 14, 15, null],
-	];
+	let cubes = $state(pattern['4x4']);
 	let tiles = $state([]);
 	let countMove = $state(0);
 
-	function restart() {
-		let flatGrid = cubes.flat();
-
+	function restart(pat = pattern['4x4']) {
+		let flatGrid = pat.flat();
+		
 		flatGrid = shuffle(flatGrid);
-
-		cubes.forEach((disc, rowindex) => {
+		
+		tiles = []
+		pat.forEach((disc, rowindex) => {
 			disc.forEach((value, colindex) => {
 				if (!tiles[rowindex]) {
 					tiles[rowindex] = []
@@ -55,9 +64,9 @@
 			});
 		});
 
+		cubes = pat
 		countMove = 0;
 	}
-
 	function handleMove(rowmove, colmove) {
 		let [rowindex, colindex] = indicate(tiles);
 		if (rowmove == rowindex) {
@@ -124,7 +133,16 @@
 	});
 </script>
 
-<div class="text-center p-4">
+<div class="flex flex-wrap justify-center items-center gap-6 p-4">
+	<label>
+		<select class="cursor-pointer bg-neutral-900 text-neutral-50" oninput={(e) => {
+			restart(pattern[e.target.value])
+		}}>
+		{#each Object.keys(pattern) as key}
+			<option value={key}>{key}</option>
+		{/each}
+		</select>
+	</label>
 	<button
 		class="cursor-pointer font-semibold text-lg border-b-2 border-violet-600 hover:border-transparent hover:text-yellow-300"
 		onclick={() => {
@@ -133,17 +151,17 @@
 	>
 		Restart
 	</button>
-	<span class="ml-6">Moves: {countMove}</span>
+	<span class="">Moves: {countMove}</span>
 </div>
 
 <div
-	class="flex flex-col justify-center items-center p-4 text-center font-semibold text-4xl font-mono border border-neutral-900 w-fit mx-auto text-neutral-900"
+	class="flex flex-col justify-center items-center p-4 text-center font-semibold text-4xl font-mono w-fit mx-auto text-neutral-900"
 >
-	{#each tiles as piles, rowindex}
+	{#each tiles as piles, rowindex (rowindex)}
 		<div class="flex">
-			{#each piles as pile, colindex}
+			{#each piles as pile, colindex (`${rowindex}-${colindex}`)}
 				<button
-					class="cursor-pointer block border w-22 h-22 border-violet-600 {pile ==
+					class="cursor-pointer block border w-22 h-22 border-violet-600 transition {pile ==
 					null
 						? 'bg-violet-600'
 						: cubes[rowindex][colindex] == pile
