@@ -170,7 +170,7 @@
 		<div class="flex">
 			{#each piles as pile, colindex (`${rowindex}-${colindex}`)}
 				<button
-					class="cursor-pointer block border w-22 h-22 border-violet-600 transition {pile ==
+					class="cursor-pointer block border w-[88px] h-[88px] border-violet-600 transition {pile ==
 					null
 						? 'bg-violet-600'
 						: cubes[rowindex][colindex] == pile
