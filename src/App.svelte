@@ -1,6 +1,10 @@
 <script>
 	import { onMount } from "svelte";
 
+	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+	function getRandomInt(max) {
+		return Math.floor(Math.random() * max);
+	}
 	function indicate(array) {
 		let indicate = [];
 		for (let rowindex = 0; rowindex < array.length; rowindex++) {
@@ -58,19 +62,25 @@
 	let countMove = $state(0);
 
 	function restart(pat = pattern[board]) {
-		let flatGrid = pat.flat();
+		// let flatGrid = pat.flat();
 		
-		flatGrid = shuffle(flatGrid);
+		// flatGrid = shuffle(flatGrid);
+		tiles = pat // []
 		
-		tiles = []
-		pat.forEach((disc, rowindex) => {
-			disc.forEach((value, colindex) => {
-				if (!tiles[rowindex]) {
-					tiles[rowindex] = []
-				}
-				tiles[rowindex][colindex] = flatGrid.pop();
-			});
+		;[...Array(180)].forEach(() => {
+			let ranRow = getRandomInt(pat.length +1)
+			let ranCol = getRandomInt(pat[0].length +1)
+			handleMove(ranRow, ranCol)
 		});
+		
+		// pat.forEach((disc, rowindex) => {
+		// 	disc.forEach((value, colindex) => {
+		// 		if (!tiles[rowindex]) {
+		// 			tiles[rowindex] = []
+		// 		}
+		// 		tiles[rowindex][colindex] = flatGrid.pop();
+		// 	});
+		// });
 
 		cubes = pat
 		countMove = 0;
