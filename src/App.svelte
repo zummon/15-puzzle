@@ -132,7 +132,7 @@
 		</select>
 	</label>
 	<button
-		class="cursor-pointer font-semibold text-lg border-b-2 border-violet-600 hover:border-transparent hover:text-yellow-300"
+		class="cursor-pointer font-semibold text-lg border-b-2 border-yellow-400 hover:border-violet-600 text-yellow-300"
 		onclick={() => {
 			restart();
 		}}
