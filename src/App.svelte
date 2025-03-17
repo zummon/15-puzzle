@@ -16,25 +16,6 @@
 		}
 		return indicate;
 	}
-	// https://stackoverflow.com/a/2450976/12765719
-	function shuffle(array) {
-		let currentIndex = array.length;
-
-		// While there remain elements to shuffle...
-		while (currentIndex != 0) {
-			// Pick a remaining element...
-			let randomIndex = Math.floor(Math.random() * currentIndex);
-			currentIndex--;
-
-			// And swap it with the current element.
-			[array[currentIndex], array[randomIndex]] = [
-				array[randomIndex],
-				array[currentIndex],
-			];
-		}
-
-		return array;
-	}
 	const pattern = {
 		'4x4': [
 			[1, 2, 3, 4],
@@ -62,26 +43,14 @@
 	let countMove = $state(0);
 
 	function restart(pat = pattern[board]) {
-		// let flatGrid = pat.flat();
+		tiles = pat
 		
-		// flatGrid = shuffle(flatGrid);
-		tiles = pat // []
-		
-		;[...Array(180)].forEach(() => {
-			let ranRow = getRandomInt(pat.length +1)
-			let ranCol = getRandomInt(pat[0].length +1)
+		;[...Array(300)].forEach(() => {
+			let ranRow = getRandomInt(pat.length)
+			let ranCol = getRandomInt(pat[0].length)
 			handleMove(ranRow, ranCol)
 		});
 		
-		// pat.forEach((disc, rowindex) => {
-		// 	disc.forEach((value, colindex) => {
-		// 		if (!tiles[rowindex]) {
-		// 			tiles[rowindex] = []
-		// 		}
-		// 		tiles[rowindex][colindex] = flatGrid.pop();
-		// 	});
-		// });
-
 		cubes = pat
 		countMove = 0;
 	}
