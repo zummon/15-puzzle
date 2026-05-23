@@ -1,1 +1,48 @@
 @import 'tailwindcss';
+
+@theme {
+	/* Warm & Cute Pastel Color Palette */
+	--color-brand-light-bg: #fdfaf6;
+	/* Warm cream */
+	--color-brand-light-board: #f4eae1;
+	/* Soft biscuit */
+	--color-brand-light-tile: #ffffff;
+	/* Pure white tile */
+	--color-brand-light-correct: #ffeaa7;
+	/* Warm honey yellow */
+	--color-brand-light-text: #5d4037;
+	/* Soft dark brown */
+	--color-brand-light-accent: #ff7675;
+	/* Sweet coral pink */
+
+	--color-brand-dark-bg: #1e1b18;
+	/* Deep espresso */
+	--color-brand-dark-board: #2d241e;
+	/* Dark chocolate */
+	--color-brand-dark-tile: #3d312a;
+	/* Milk chocolate tile */
+	--color-brand-dark-correct: #d4a373;
+	/* Toasted almond */
+	--color-brand-dark-text: #f5ebe0;
+	/* Creamy white text */
+	--color-brand-dark-accent: #ff7675;
+	/* Sweet coral pink */
+
+	/* Cute Bouncy Spring Animations */
+	--animate-bounce-subtle: bounceSubtle 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes bounceSubtle {
+	0% {
+		transform: scale(0.95);
+	}
+
+	100% {
+		transform: scale(1);
+	}
+}
+
+/* Base Body Background transition for a smooth theme swap */
+body {
+	@apply bg-brand-light-bg text-brand-light-text dark:bg-brand-dark-bg dark:text-brand-dark-text transition-colors duration-500 min-h-screen antialiased;
+}
